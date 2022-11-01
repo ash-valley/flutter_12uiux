@@ -8,23 +8,26 @@ class Page {
   Page({
     required this.title,
     required this.path,
-    required this.widgetBuilder,
+    required this.builder,
   });
   final String title;
   final String path;
-  final Widget Function(String title) widgetBuilder;
+  final Widget Function(String title) builder;
 }
 
 final pageList = [
   Page(
     title: 'Easing',
     path: "easing",
-    widgetBuilder: (title) => Easing(
+    builder: (title) => Easing(
       title: title,
     ),
   ),
-//   Page(path: "/offset&delay", title: "2. Offset & Delay"),
-//   Page(path: "/parenting", title: "3. Parenting"),
+//   Page(
+//     path: "offset&delay",
+//     title: "Offset & Delay",
+//     builder: (title) => Text(title),
+//   ),
 ];
 
 final router = GoRouter(
@@ -36,7 +39,7 @@ final router = GoRouter(
         ...pageList.mapWithIndex(
           (e, i) => GoRoute(
             path: e.path,
-            builder: (_, __) => e.widgetBuilder('${i + 1}. ${e.title}'),
+            builder: (_, __) => e.builder('${i + 1}. ${e.title}'),
           ),
         ),
       ],

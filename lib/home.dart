@@ -10,18 +10,19 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
-      title: 'Home Page',
+      title: '12 principles of UI/UX animation',
       body: ListView.builder(
-          itemCount: pageList.length,
-          itemBuilder: (context, index) {
-            final page = pageList[index];
-            return Card(
-              child: ListTile(
-                title: Text("${index + 1}. ${page.title}"),
-                onTap: () => context.go('/${page.path}'),
-              ),
-            );
-          }),
+        itemCount: pageList.length,
+        itemBuilder: (context, index) {
+          final page = pageList[index];
+          return Card(
+            child: ListTile(
+              title: Text("${index + 1}. ${page.title}"),
+              onTap: () => context.go('/${page.path}'),
+            ),
+          );
+        },
+      ),
     );
   }
 }
