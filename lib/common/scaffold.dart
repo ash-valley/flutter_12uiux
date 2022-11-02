@@ -6,10 +6,12 @@ class MyScaffold extends StatelessWidget {
     super.key,
     required this.title,
     required this.body,
+    this.withSafeArea = true,
   });
 
   final String title;
   final Widget body;
+  final bool withSafeArea;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +38,7 @@ class MyScaffold extends StatelessWidget {
                 ),
               ),
       ),
-      body: body,
+      body: withSafeArea ? SafeArea(child: body) : body,
     );
-    ;
   }
 }
