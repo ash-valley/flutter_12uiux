@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_12uiux/common/scaffold.dart';
 
+class ContentData {
+  const ContentData({
+    required this.name,
+    required this.price,
+    required this.detail,
+    required this.colors,
+  });
+  final String name;
+  final int price;
+  final String detail;
+  final List<Color> colors;
+}
+
 class Easing extends StatelessWidget {
   const Easing({
     super.key,
@@ -29,12 +42,29 @@ class EasingBody extends StatefulWidget {
 
 class _EasingBodyState extends State<EasingBody>
     with SingleTickerProviderStateMixin {
-  static const List<Tab> tabs = [
-    Tab(
-      text: "tab1",
+  static const List<ContentData> contents = [
+    ContentData(
+      name: "Janet",
+      price: 10000,
+      detail: """
+detaildetaildetaildetaildetaildetail
+detaildetaildetaildetail
+detaildetail
+""",
+      colors: [
+        Colors.redAccent,
+        Colors.blueAccent,
+      ],
     ),
-    Tab(
-      text: "tab2",
+    ContentData(
+      name: "Morgen",
+      price: 10002,
+      detail: """detail""",
+      colors: [
+        Colors.redAccent,
+        Colors.blueAccent,
+        Colors.yellowAccent,
+      ],
     ),
   ];
   late TabController _tabController;
@@ -44,7 +74,7 @@ class _EasingBodyState extends State<EasingBody>
     super.initState();
     _tabController = TabController(
       vsync: this,
-      length: tabs.length,
+      length: contents.length,
     );
     _tabController.animation?.addListener(() {
       print(_tabController.animation?.value);
@@ -64,7 +94,11 @@ class _EasingBodyState extends State<EasingBody>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: [Content(), Content()],
+            children: contents
+                .map(
+                  (e) => Content(content: e),
+                )
+                .toList(),
           ),
         ),
         // SizedBox(
@@ -72,7 +106,11 @@ class _EasingBodyState extends State<EasingBody>
         //   child: TabBar(
         //     indicatorColor: Theme.of(context).secondaryHeaderColor,
         //     labelColor: Theme.of(context).primaryColor,
-        //     tabs: tabs,
+        //     tabs: contents
+        //         .map((e) => Tab(
+        //               text: e.name,
+        //             ))
+        //         .toList(),
         //     controller: _tabController,
         //   ),
         // ),
@@ -82,7 +120,12 @@ class _EasingBodyState extends State<EasingBody>
 }
 
 class Content extends StatelessWidget {
-  const Content({super.key});
+  const Content({
+    super.key,
+    required this.content,
+  });
+
+  final ContentData content;
 
   @override
   Widget build(BuildContext context) {
@@ -92,65 +135,33 @@ class Content extends StatelessWidget {
       children: [
         Padding(
           padding:
-              const EdgeInsets.only(top: 98, left: 16, right: 16, bottom: 24),
+              const EdgeInsets.only(top: 98, left: 24, right: 24, bottom: 24),
           child: Card(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  SizedBox.square(
+                  const SizedBox.square(
                     dimension: 100,
                   ),
                   Text(
-                    'Janet',
+                    content.name,
                     style: Theme.of(context).textTheme.headline2,
                   ),
                   Text(
-                    '￥100,000',
+                    '￥${content.price}',
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Text(
-                      '''
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                      ''',
+                      content.detail,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                   const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.redAccent,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.blueAccent,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ],
-                  ),
+                  ColorSelector(colors: content.colors),
                   const Spacer(),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -178,6 +189,75 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
             height: 132,
             width: 108,
             child: Container(color: Theme.of(context).primaryColorDark),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ColorSelector extends StatefulWidget {
+  const ColorSelector({
+    super.key,
+    required this.colors,
+  });
+
+  final List<Color> colors;
+
+  @override
+  State<ColorSelector> createState() => _ColorSelectorState();
+}
+
+class _ColorSelectorState extends State<ColorSelector> {
+  late Color selectedColor;
+  @override
+  void initState() {
+    selectedColor = widget.colors.first;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: widget.colors.map(
+        (e) {
+          final color = GestureDetector(
+            onTap: () => setState(() {
+              selectedColor = e;
+            }),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: e,
+                shape: BoxShape.circle,
+              ),
+            ),
+          );
+          return e == selectedColor ? color.withSelectedCircle(48, 48) : color;
+        },
+      ).toList(),
+    );
+  }
+}
+
+extension ContainerEx on Widget {
+  Stack withSelectedCircle(double width, double height) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        this,
+        Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+              width: 2,
+              strokeAlign: StrokeAlign.inside,
+            ),
+            shape: BoxShape.circle,
           ),
         ),
       ],
