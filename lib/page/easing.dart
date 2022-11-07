@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_12uiux/common/scaffold.dart';
+import 'package:flutter_12uiux/extensions/list_map_with_index.dart';
 
 class ContentData {
   const ContentData({
@@ -78,6 +81,7 @@ detaildetail
     ),
   ];
   late TabController _tabController;
+  double _animationValue = 0;
 
   @override
   void initState() {
@@ -86,8 +90,11 @@ detaildetail
       vsync: this,
       length: contents.length,
     );
+    _animationValue = _tabController.animation?.value ?? 0;
     _tabController.animation?.addListener(() {
-      print(_tabController.animation?.value);
+      setState(() {
+        _animationValue = _tabController.animation?.value ?? 0;
+      });
     });
   }
 
@@ -99,32 +106,18 @@ detaildetail
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: contents
-                .map(
-                  (e) => Content(content: e),
-                )
-                .toList(),
-          ),
-        ),
-        // SizedBox(
-        //   height: 32,
-        //   child: TabBar(
-        //     indicatorColor: Theme.of(context).secondaryHeaderColor,
-        //     labelColor: Theme.of(context).primaryColor,
-        //     tabs: contents
-        //         .map((e) => Tab(
-        //               text: e.name,
-        //             ))
-        //         .toList(),
-        //     controller: _tabController,
-        //   ),
-        // ),
-      ],
+    return TabBarView(
+      controller: _tabController,
+      children: contents
+          .mapWithIndex(
+            (e, i) => Transform(
+              transform: Matrix4.identity()
+                ..rotateY((_animationValue - i) * pi / 2),
+              alignment: FractionalOffset(-(_animationValue - i) * .5, 0),
+              child: Content(content: e),
+            ),
+          )
+          .toList(),
     );
   }
 }
@@ -231,7 +224,7 @@ class _ColorSelectorState extends State<ColorSelector> {
 
   @override
   Widget build(BuildContext context) {
-    const double circleRadius = 40;
+    const double circleDiameter = 40;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: widget.colors
@@ -241,14 +234,14 @@ class _ColorSelectorState extends State<ColorSelector> {
                 selectedColor = e;
               }),
               child: Container(
-                width: circleRadius,
-                height: circleRadius,
+                width: circleDiameter,
+                height: circleDiameter,
                 decoration: BoxDecoration(
                   color: e,
                   shape: BoxShape.circle,
                 ),
               ),
-            ).withSelectedCircle(e == selectedColor, circleRadius + 8),
+            ).withSelectedCircle(e == selectedColor, circleDiameter + 8),
           )
           .toList(),
     );
@@ -256,15 +249,15 @@ class _ColorSelectorState extends State<ColorSelector> {
 }
 
 extension ContainerEx on Widget {
-  Widget withSelectedCircle(bool selected, double radius) {
+  Widget withSelectedCircle(bool selected, double diameter) {
     return selected
         ? Stack(
             alignment: Alignment.center,
             children: [
               this,
               Container(
-                width: radius,
-                height: radius,
+                width: diameter,
+                height: diameter,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.grey,
@@ -277,7 +270,7 @@ extension ContainerEx on Widget {
             ],
           )
         : SizedBox.square(
-            dimension: radius,
+            dimension: diameter,
             child: this,
           );
   }
