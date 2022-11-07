@@ -130,7 +130,6 @@ class Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      fit: StackFit.expand,
       alignment: Alignment.center,
       children: [
         Padding(
@@ -168,7 +167,9 @@ class Content extends StatelessWidget {
                       backgroundColor: Theme.of(context).primaryColor,
                       foregroundColor: Theme.of(context).secondaryHeaderColor,
                     ),
-                    onPressed: () => null,
+                    onPressed: () {
+                      return;
+                    },
                     child: const Expanded(
                       child: Center(
                         child: Text('Buy'),
@@ -235,7 +236,7 @@ class _ColorSelectorState extends State<ColorSelector> {
               ),
             ),
           );
-          return e == selectedColor ? color.withSelectedCircle(48, 48) : color;
+          return color.withSelectedCircle(e == selectedColor, 48, 48);
         },
       ).toList(),
     );
@@ -243,24 +244,30 @@ class _ColorSelectorState extends State<ColorSelector> {
 }
 
 extension ContainerEx on Widget {
-  Stack withSelectedCircle(double width, double height) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        this,
-        Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey,
-              width: 2,
-              strokeAlign: StrokeAlign.inside,
-            ),
-            shape: BoxShape.circle,
-          ),
-        ),
-      ],
-    );
+  Widget withSelectedCircle(bool selected, double width, double height) {
+    return selected
+        ? Stack(
+            alignment: Alignment.center,
+            children: [
+              this,
+              Container(
+                width: width,
+                height: height,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 2,
+                    strokeAlign: StrokeAlign.inside,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ],
+          )
+        : SizedBox(
+            width: width,
+            height: height,
+            child: this,
+          );
   }
 }
