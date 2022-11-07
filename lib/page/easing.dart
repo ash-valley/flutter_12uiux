@@ -133,8 +133,12 @@ class Content extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Padding(
-          padding:
-              const EdgeInsets.only(top: 98, left: 24, right: 24, bottom: 24),
+          padding: const EdgeInsets.only(
+            top: 98,
+            left: 24,
+            right: 24,
+            bottom: 24,
+          ),
           child: Card(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -145,19 +149,19 @@ class Content extends StatelessWidget {
                   ),
                   Text(
                     content.name,
+                    textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline2,
                   ),
                   Text(
                     '￥${content.price}',
+                    textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline6,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Text(
-                      content.detail,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                  const SizedBox(height: 16),
+                  Text(
+                    content.detail,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const Spacer(),
                   ColorSelector(colors: content.colors),
@@ -170,15 +174,13 @@ class Content extends StatelessWidget {
                     onPressed: () {
                       return;
                     },
-                    child: const Expanded(
-                      child: Center(
-                        child: Text('Buy'),
-                      ),
+                    child: const Center(
+                      child: Text('Buy'),
                     ),
                   ),
                   const SizedBox(
                     height: 16,
-                  )
+                  ),
                 ],
               ),
             ),
