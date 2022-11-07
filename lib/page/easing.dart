@@ -231,40 +231,40 @@ class _ColorSelectorState extends State<ColorSelector> {
 
   @override
   Widget build(BuildContext context) {
+    const double circleRadius = 40;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: widget.colors.map(
-        (e) {
-          final color = GestureDetector(
-            onTap: () => setState(() {
-              selectedColor = e;
-            }),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: e,
-                shape: BoxShape.circle,
+      children: widget.colors
+          .map(
+            (e) => GestureDetector(
+              onTap: () => setState(() {
+                selectedColor = e;
+              }),
+              child: Container(
+                width: circleRadius,
+                height: circleRadius,
+                decoration: BoxDecoration(
+                  color: e,
+                  shape: BoxShape.circle,
+                ),
               ),
-            ),
-          );
-          return color.withSelectedCircle(e == selectedColor, 48, 48);
-        },
-      ).toList(),
+            ).withSelectedCircle(e == selectedColor, circleRadius + 8),
+          )
+          .toList(),
     );
   }
 }
 
 extension ContainerEx on Widget {
-  Widget withSelectedCircle(bool selected, double width, double height) {
+  Widget withSelectedCircle(bool selected, double radius) {
     return selected
         ? Stack(
             alignment: Alignment.center,
             children: [
               this,
               Container(
-                width: width,
-                height: height,
+                width: radius,
+                height: radius,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.grey,
@@ -276,9 +276,8 @@ extension ContainerEx on Widget {
               ),
             ],
           )
-        : SizedBox(
-            width: width,
-            height: height,
+        : SizedBox.square(
+            dimension: radius,
             child: this,
           );
   }
