@@ -66,6 +66,16 @@ detaildetail
         Colors.yellowAccent,
       ],
     ),
+    ContentData(
+      name: "Carven",
+      price: 100020,
+      detail: """detail""",
+      colors: [
+        Colors.redAccent,
+        Colors.blueAccent,
+        Colors.yellowAccent,
+      ],
+    ),
   ];
   late TabController _tabController;
 
