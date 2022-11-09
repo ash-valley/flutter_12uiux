@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_12uiux/common/scaffold.dart';
-import 'package:flutter_12uiux/extensions/list_map_with_index.dart';
 
 class ContentData {
   const ContentData({
@@ -80,44 +77,29 @@ detaildetail
       ],
     ),
   ];
-  late TabController _tabController;
-  double _animationValue = 0;
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(
-      vsync: this,
-      length: contents.length,
-    );
-    _animationValue = _tabController.animation?.value ?? 0;
-    _tabController.animation?.addListener(() {
-      setState(() {
-        _animationValue = _tabController.animation?.value ?? 0;
-      });
-    });
+    _pageController = PageController(viewportFraction: .85);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return TabBarView(
-      controller: _tabController,
-      children: contents
-          .mapWithIndex(
-            (e, i) => Transform(
-              transform: Matrix4.identity()
-                ..rotateY((_animationValue - i) * pi / 2),
-              alignment: FractionalOffset(-(_animationValue - i) * .5, 0),
-              child: Content(content: e),
-            ),
-          )
-          .toList(),
+    return PageView.builder(
+      controller: _pageController,
+      itemCount: contents.length,
+      itemBuilder: (context, index) {
+        final content = contents[index];
+        return Content(content: content);
+      },
     );
   }
 }
@@ -138,9 +120,9 @@ class Content extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(
             top: 98,
-            left: 24,
-            right: 24,
-            bottom: 24,
+            left: 8,
+            right: 8,
+            bottom: 16,
           ),
           child: Card(
             child: Padding(
