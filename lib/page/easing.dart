@@ -246,7 +246,7 @@ class _ColorSelectorState extends State<ColorSelector> {
   }
 }
 
-extension ContainerEx on Widget {
+extension on Widget {
   Widget withSelectedCircle(bool selected, double diameter) {
     return selected
         ? Stack(
