@@ -7,11 +7,15 @@ class MyScaffold extends StatelessWidget {
     required this.title,
     required this.body,
     this.withSafeArea = true,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
   });
 
   final String title;
   final Widget body;
   final bool withSafeArea;
+  final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +42,8 @@ class MyScaffold extends StatelessWidget {
                 ),
               ),
       ),
+      floatingActionButtonLocation: floatingActionButtonLocation,
+      floatingActionButton: floatingActionButton,
       body: withSafeArea ? SafeArea(child: body) : body,
     );
   }
