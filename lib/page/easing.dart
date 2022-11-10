@@ -114,72 +114,88 @@ class Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 98,
-            left: 8,
-            right: 8,
-            bottom: 16,
-          ),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  const SizedBox.square(
-                    dimension: 100,
-                  ),
-                  Text(
-                    content.name,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline2,
-                  ),
-                  Text(
-                    '￥${content.price}',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    content.detail,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  const Spacer(),
-                  ColorSelector(colors: content.colors),
-                  const Spacer(),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Theme.of(context).secondaryHeaderColor,
-                    ),
-                    onPressed: () {
-                      return;
-                    },
-                    child: const Center(
-                      child: Text('Buy'),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                ],
+    const imageSize = Size(108, 132);
+    return Padding(
+      padding: const EdgeInsets.only(top: 60.0),
+      child: LayoutBuilder(builder: (context, constraints) {
+        final cardHeight = constraints.maxHeight - imageSize.height / 1.8;
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: cardHeight,
+                child: _Card(
+                  content: content,
+                ),
               ),
             ),
-          ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox.fromSize(
+                size: imageSize,
+                child: Container(color: Theme.of(context).primaryColorDark),
+              ),
+            ),
+          ],
+        );
+      }),
+    );
+  }
+}
+
+class _Card extends StatelessWidget {
+  const _Card({
+    required this.content,
+  });
+
+  final ContentData content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            const SizedBox.square(dimension: 100),
+            Text(
+              content.name,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headline2,
+            ),
+            Text(
+              '￥${content.price}',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              content.detail,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const Spacer(),
+            ColorSelector(colors: content.colors),
+            const Spacer(),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColor,
+                foregroundColor: Theme.of(context).secondaryHeaderColor,
+              ),
+              onPressed: () {
+                return;
+              },
+              child: const Center(
+                child: Text('Buy'),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
         ),
-        Align(
-          alignment: const Alignment(0, -.8),
-          child: SizedBox(
-            height: 132,
-            width: 108,
-            child: Container(color: Theme.of(context).primaryColorDark),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
