@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_12uiux/common/scaffold.dart';
 
-class ContentData {
-  const ContentData({
+class _ContentData {
+  const _ContentData({
     required this.name,
     required this.price,
     required this.detail,
@@ -27,23 +27,23 @@ class Easing extends StatelessWidget {
     return MyScaffold(
       title: title,
       body: const Center(
-        child: EasingBody(),
+        child: _EasingBody(),
       ),
     );
   }
 }
 
-class EasingBody extends StatefulWidget {
-  const EasingBody({super.key});
+class _EasingBody extends StatefulWidget {
+  const _EasingBody();
 
   @override
-  State<EasingBody> createState() => _EasingBodyState();
+  State<_EasingBody> createState() => _EasingBodyState();
 }
 
-class _EasingBodyState extends State<EasingBody>
+class _EasingBodyState extends State<_EasingBody>
     with SingleTickerProviderStateMixin {
-  static const List<ContentData> contents = [
-    ContentData(
+  static const List<_ContentData> contents = [
+    _ContentData(
       name: "Janet",
       price: 10000,
       detail: """
@@ -56,7 +56,7 @@ detaildetail
         Colors.blueAccent,
       ],
     ),
-    ContentData(
+    _ContentData(
       name: "Morgen",
       price: 10002,
       detail: """detail""",
@@ -66,7 +66,7 @@ detaildetail
         Colors.yellowAccent,
       ],
     ),
-    ContentData(
+    _ContentData(
       name: "Carven",
       price: 100020,
       detail: """detail""",
@@ -98,19 +98,18 @@ detaildetail
       itemCount: contents.length,
       itemBuilder: (context, index) {
         final content = contents[index];
-        return Content(content: content);
+        return _Content(content: content);
       },
     );
   }
 }
 
-class Content extends StatelessWidget {
-  const Content({
-    super.key,
+class _Content extends StatelessWidget {
+  const _Content({
     required this.content,
   });
 
-  final ContentData content;
+  final _ContentData content;
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +149,7 @@ class _Card extends StatelessWidget {
     required this.content,
   });
 
-  final ContentData content;
+  final _ContentData content;
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +177,7 @@ class _Card extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const Spacer(),
-            ColorSelector(colors: content.colors),
+            _ColorSelector(colors: content.colors),
             const Spacer(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -200,19 +199,18 @@ class _Card extends StatelessWidget {
   }
 }
 
-class ColorSelector extends StatefulWidget {
-  const ColorSelector({
-    super.key,
+class _ColorSelector extends StatefulWidget {
+  const _ColorSelector({
     required this.colors,
   });
 
   final List<Color> colors;
 
   @override
-  State<ColorSelector> createState() => _ColorSelectorState();
+  State<_ColorSelector> createState() => _ColorSelectorState();
 }
 
-class _ColorSelectorState extends State<ColorSelector> {
+class _ColorSelectorState extends State<_ColorSelector> {
   late Color selectedColor;
   @override
   void initState() {
