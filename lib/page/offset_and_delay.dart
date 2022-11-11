@@ -94,14 +94,48 @@ class _OffsetAndDelayBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: _contents.length,
-      itemBuilder: ((context, index) {
-        return _ListItem(
-          data: _contents[index],
-        );
-      }),
+    return _FakeLoadingBuilder(
+      duration: const Duration(seconds: 3),
+      builder: (context, loading) => loading
+          ? const CircularProgressIndicator()
+          : ListView.builder(
+              itemCount: _contents.length,
+              itemBuilder: ((context, index) {
+                return _ListItem(
+                  data: _contents[index],
+                );
+              }),
+            ),
     );
+  }
+}
+
+class _FakeLoadingBuilder extends StatefulWidget {
+  const _FakeLoadingBuilder({
+    required this.builder,
+    required this.duration,
+  });
+
+  final Widget Function(BuildContext, bool) builder;
+  final Duration duration;
+
+  @override
+  State<_FakeLoadingBuilder> createState() => _FakeLoadingBuilderState();
+}
+
+class _FakeLoadingBuilderState extends State<_FakeLoadingBuilder> {
+  bool loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(widget.duration)
+        .then((value) => setState(() => loading = false));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.builder(context, loading);
   }
 }
 
@@ -128,6 +162,7 @@ class _ListItem extends StatelessWidget {
             color: Colors.black87,
           ),
         ),
+        trailing: const Icon(Icons.info),
         title: Text(data.fileName),
         subtitle: Text(DateFormat('yyyy/M/d').format(data.updateAt)),
       ),
