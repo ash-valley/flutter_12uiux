@@ -94,7 +94,7 @@ class _OffsetAndDelayBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _FakeLoadingBuilder(
+    return _DummyLoadingBuilder(
       duration: const Duration(seconds: 3),
       builder: (context, loading) => loading
           ? const CircularProgressIndicator()
@@ -110,8 +110,8 @@ class _OffsetAndDelayBody extends StatelessWidget {
   }
 }
 
-class _FakeLoadingBuilder extends StatefulWidget {
-  const _FakeLoadingBuilder({
+class _DummyLoadingBuilder extends StatefulWidget {
+  const _DummyLoadingBuilder({
     required this.builder,
     required this.duration,
   });
@@ -120,17 +120,19 @@ class _FakeLoadingBuilder extends StatefulWidget {
   final Duration duration;
 
   @override
-  State<_FakeLoadingBuilder> createState() => _FakeLoadingBuilderState();
+  State<_DummyLoadingBuilder> createState() => _DummyLoadingBuilderState();
 }
 
-class _FakeLoadingBuilderState extends State<_FakeLoadingBuilder> {
-  bool loading = true;
+class _DummyLoadingBuilderState extends State<_DummyLoadingBuilder> {
+  late bool loading;
 
   @override
   void initState() {
     super.initState();
+    loading = true;
     Future.delayed(widget.duration)
-        .then((value) => setState(() => loading = false));
+        .then((_) => setState(() => loading = false))
+        .onError((_, __) => loading = false);
   }
 
   @override
