@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_12uiux/common/scaffold.dart';
 import 'package:intl/intl.dart';
@@ -101,8 +103,11 @@ class _OffsetAndDelayBody extends StatelessWidget {
           : ListView.builder(
               itemCount: _contents.length,
               itemBuilder: ((context, index) {
-                return _ListItem(
-                  data: _contents[index],
+                return _AnimationItem(
+                  index: index,
+                  child: _ListItem(
+                    data: _contents[index],
+                  ),
                 );
               }),
             ),
@@ -168,6 +173,64 @@ class _ListItem extends StatelessWidget {
         title: Text(data.fileName),
         subtitle: Text(DateFormat('yyyy/M/d').format(data.updateAt)),
       ),
+    );
+  }
+}
+
+class _AnimationItem extends StatefulWidget {
+  const _AnimationItem({
+    required this.child,
+    required this.index,
+  });
+
+  final Widget child;
+  final int index;
+
+  @override
+  State<_AnimationItem> createState() => __AnimationItemState();
+}
+
+class __AnimationItemState extends State<_AnimationItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _timer =
+        Timer(const Duration(milliseconds: 200), _animationController.forward);
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final animation =
+        CurvedAnimation(parent: _animationController, curve: Curves.ease);
+    double buildDoubleTween(double begin, double end) =>
+        Tween<double>(begin: begin, end: end).animate(animation).value;
+    return AnimatedBuilder(
+      animation: _animationController,
+      child: widget.child,
+      builder: (context, child) {
+        return Opacity(
+          opacity: buildDoubleTween(0, 1),
+          child: Transform.translate(
+            offset: Offset(0, buildDoubleTween(100.0 + widget.index * 10, 1)),
+            child: child,
+          ),
+        );
+      },
     );
   }
 }
