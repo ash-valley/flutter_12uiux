@@ -203,40 +203,39 @@ class _AnimationItem extends StatefulWidget {
 class __AnimationItemState extends State<_AnimationItem>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
-    );
-    _timer =
-        Timer(const Duration(milliseconds: 200), _animationController.forward);
+      duration: const Duration(milliseconds: 750),
+    )..forward();
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
     _animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final animation =
-        CurvedAnimation(parent: _animationController, curve: Curves.ease);
-    double buildDoubleTween(double begin, double end) =>
-        Tween<double>(begin: begin, end: end).animate(animation).value;
+    final animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.ease,
+    );
     return AnimatedBuilder(
       animation: _animationController,
       child: widget.child,
       builder: (context, child) {
-        return Opacity(
-          opacity: buildDoubleTween(0, 1),
-          child: Transform.translate(
-            offset: Offset(0, buildDoubleTween(100.0 + widget.index * 10, 1)),
+        return FadeTransition(
+          opacity: Tween<double>(begin: 0, end: 1).animate(animation),
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: Offset(0, 1 + widget.index * 0.5),
+              end: Offset.zero,
+            ).animate(animation),
             child: child,
           ),
         );
