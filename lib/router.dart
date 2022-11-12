@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_12uiux/home.dart';
 import 'package:flutter_12uiux/page/easing.dart';
 import 'package:flutter_12uiux/page/offset_and_delay.dart';
+import 'package:flutter_12uiux/page/parenting.dart';
 import 'package:go_router/go_router.dart';
 
 import '../extensions/list_map_with_index.dart';
@@ -26,9 +27,14 @@ final pageList = [
     ),
   ),
   Page(
-    path: "offset&delay",
     title: "Offset & Delay",
+    path: "offset&delay",
     builder: (title) => OffsetAndDelay(title: title),
+  ),
+  Page(
+    title: "Parenting",
+    path: "parenting",
+    builder: (title) => Parenting(title: title),
   ),
 ];
 
