@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_12uiux/common/scaffold.dart';
 import 'package:intl/intl.dart';
 
+final _loadingKey = GlobalKey<_DummyLoadingBuilderState>();
+
 class OffsetAndDelay extends StatelessWidget {
   const OffsetAndDelay({
     super.key,
@@ -17,8 +19,8 @@ class OffsetAndDelay extends StatelessWidget {
     return MyScaffold(
       title: title,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
+        onPressed: () => _loadingKey.currentState?.load(),
+        child: const Icon(Icons.refresh),
       ),
       body: const Center(
         child: _OffsetAndDelayBody(),
@@ -97,7 +99,8 @@ class _OffsetAndDelayBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _DummyLoadingBuilder(
-      duration: const Duration(seconds: 3),
+      key: _loadingKey,
+      duration: const Duration(seconds: 1),
       builder: (context, loading) => loading
           ? const CircularProgressIndicator()
           : ListView.builder(
@@ -117,6 +120,7 @@ class _OffsetAndDelayBody extends StatelessWidget {
 
 class _DummyLoadingBuilder extends StatefulWidget {
   const _DummyLoadingBuilder({
+    super.key,
     required this.builder,
     required this.duration,
   });
@@ -131,13 +135,19 @@ class _DummyLoadingBuilder extends StatefulWidget {
 class _DummyLoadingBuilderState extends State<_DummyLoadingBuilder> {
   late bool loading;
 
-  @override
-  void initState() {
-    super.initState();
-    loading = true;
+  void load() {
+    setState(() {
+      loading = true;
+    });
     Future.delayed(widget.duration)
         .then((_) => setState(() => loading = false))
         .onError((_, __) => loading = false);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    load();
   }
 
   @override
