@@ -104,12 +104,12 @@ class _OffsetAndDelayBody extends StatelessWidget {
       builder: (context, loading) => loading
           ? const CircularProgressIndicator()
           : ListView.builder(
-              itemCount: _contents.length,
+              itemCount: 400,
               itemBuilder: ((context, index) {
                 return _AnimationItem(
                   index: index,
                   child: _ListItem(
-                    data: _contents[index],
+                    data: _contents[index % 4],
                   ),
                 );
               }),
@@ -233,7 +233,7 @@ class __AnimationItemState extends State<_AnimationItem>
           opacity: animation,
           child: SlideTransition(
             position: Tween<Offset>(
-              begin: Offset(0, 1 + widget.index * 0.5),
+              begin: Offset(1 + widget.index * 0.1, 0),
               end: Offset.zero,
             ).animate(animation),
             child: child,
