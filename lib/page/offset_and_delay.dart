@@ -233,7 +233,7 @@ class __AnimationItemState extends State<_AnimationItem>
           opacity: animation,
           child: SlideTransition(
             position: Tween<Offset>(
-              begin: Offset(1 + widget.index * 0.1, 0),
+              begin: Offset(1 + widget.index * 0.5, 0),
               end: Offset.zero,
             ).animate(animation),
             child: child,
