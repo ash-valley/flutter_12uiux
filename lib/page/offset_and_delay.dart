@@ -230,7 +230,7 @@ class __AnimationItemState extends State<_AnimationItem>
       child: widget.child,
       builder: (context, child) {
         return FadeTransition(
-          opacity: Tween<double>(begin: 0, end: 1).animate(animation),
+          opacity: animation,
           child: SlideTransition(
             position: Tween<Offset>(
               begin: Offset(0, 1 + widget.index * 0.5),
