@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_12uiux/common/scaffold.dart';
 
-const sliderSize = 60.0;
+const sliderRadius = 40.0;
 
 class Parenting extends StatelessWidget {
   const Parenting({super.key, required this.title});
@@ -42,7 +42,7 @@ class _ParentingSliderState extends State<_ParentingSlider> {
         Align(
           alignment: Alignment.topCenter,
           child: SizedBox(
-            height: meSize.height * 0.4,
+            height: meSize.height * 0.41,
             width: meSize.width,
             child: ClipPath(
               clipper: SliderClipper(
@@ -55,13 +55,38 @@ class _ParentingSliderState extends State<_ParentingSlider> {
             ),
           ),
         ),
-        Slider(
-          value: _lightIntensity,
-          onChanged: ((value) {
-            setState(() {
-              _lightIntensity = value;
-            });
-          }),
+        Positioned(
+          bottom: 50,
+          left: 0,
+          right: 0,
+          child: Slider(
+            value: _lightIntensity,
+            onChanged: ((value) {}),
+          ),
+        ),
+        Positioned(
+          bottom: 200,
+          child: Text(
+            '${(_lightIntensity * 100).round().toString()}%',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        ),
+        SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            trackHeight: 0,
+            thumbColor: Colors.blueGrey,
+            thumbShape:
+                const RoundSliderThumbShape(enabledThumbRadius: sliderRadius),
+          ),
+          child: Slider(
+            value: _lightIntensity,
+            divisions: 100,
+            onChanged: ((value) {
+              setState(() {
+                _lightIntensity = value;
+              });
+            }),
+          ),
         ),
       ],
     );
@@ -79,16 +104,19 @@ class SliderClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     final height = size.height;
     final width = size.width;
+    const clipRadius = sliderRadius + 18;
+    final adjustSliderValue =
+        (width - sliderRadius * 2) * lightIntensity + sliderRadius;
     return Path()
       ..lineTo(0, height)
-      ..lineTo(width * lightIntensity - sliderSize, height)
-      ..cubicTo(
-          width * lightIntensity - sliderSize / 1.5,
-          height - sliderSize,
-          width * lightIntensity + sliderSize / 1.5,
-          height - sliderSize,
-          width * lightIntensity + sliderSize,
-          height)
+      ..lineTo(adjustSliderValue - clipRadius, height)
+      ..arcToPoint(
+        Offset(
+          adjustSliderValue + clipRadius,
+          height,
+        ),
+        radius: const Radius.circular(sliderRadius),
+      )
       ..lineTo(width, height)
       ..lineTo(width, 0)
       ..close();
