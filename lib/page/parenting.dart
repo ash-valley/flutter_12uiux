@@ -51,6 +51,8 @@ class _ParentingSliderState extends State<_ParentingSlider> {
               child: Image.asset(
                 'assets/parenting/beds.jpg',
                 fit: BoxFit.fitWidth,
+                colorBlendMode: BlendMode.darken,
+                color: Colors.blue.withOpacity(1 - _lightIntensity),
               ),
             ),
           ),
@@ -59,9 +61,15 @@ class _ParentingSliderState extends State<_ParentingSlider> {
           bottom: 50,
           left: 0,
           right: 0,
-          child: Slider(
-            value: _lightIntensity,
-            onChanged: ((value) {}),
+          child: SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              trackHeight: 20,
+            ),
+            child: Slider(
+              value: _lightIntensity,
+              divisions: 100,
+              onChanged: ((value) {}),
+            ),
           ),
         ),
         Positioned(
