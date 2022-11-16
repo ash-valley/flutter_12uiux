@@ -117,13 +117,25 @@ class SliderClipper extends CustomClipper<Path> {
         (width - sliderRadius * 2) * lightIntensity + sliderRadius;
     return Path()
       ..lineTo(0, height)
-      ..lineTo(adjustSliderValue - clipRadius, height)
+      ..lineTo(adjustSliderValue - clipRadius - 40, height)
+      ..quadraticBezierTo(
+        adjustSliderValue - clipRadius - 10,
+        height,
+        adjustSliderValue - clipRadius,
+        height - 20,
+      )
       ..arcToPoint(
         Offset(
           adjustSliderValue + clipRadius,
-          height,
+          height - 20,
         ),
-        radius: const Radius.circular(sliderRadius),
+        radius: const Radius.circular(clipRadius * 1.1),
+      )
+      ..quadraticBezierTo(
+        adjustSliderValue + clipRadius + 10,
+        height,
+        adjustSliderValue + clipRadius + 40,
+        height,
       )
       ..lineTo(width, height)
       ..lineTo(width, 0)
