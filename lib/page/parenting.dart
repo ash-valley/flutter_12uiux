@@ -36,6 +36,7 @@ class _ParentingSliderState extends State<_ParentingSlider>
     super.initState();
     _animationController = AnimationController(
       value: 0.5,
+      duration: const Duration(milliseconds: 75),
       vsync: this,
     );
   }
@@ -109,11 +110,11 @@ class _ParentingSliderState extends State<_ParentingSlider>
           child: Slider(
             value: _lightIntensity,
             divisions: 100,
-            onChanged: ((value) async {
-              await _animationController.animateTo(
+            onChanged: ((value) {
+              _animationController.animateTo(
                 value,
                 curve: Curves.easeInOutExpo,
-                duration: const Duration(microseconds: 5),
+                duration: Duration.zero,
               );
               setState(() {
                 _lightIntensity = value;
