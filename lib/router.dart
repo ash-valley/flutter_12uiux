@@ -3,6 +3,7 @@ import 'package:flutter_12uiux/home.dart';
 import 'package:flutter_12uiux/page/easing.dart';
 import 'package:flutter_12uiux/page/offset_and_delay.dart';
 import 'package:flutter_12uiux/page/parenting.dart';
+import 'package:flutter_12uiux/page/transformation.dart';
 import 'package:go_router/go_router.dart';
 
 import '../extensions/list_map_with_index.dart';
@@ -22,9 +23,7 @@ final pageList = [
   Page(
     title: 'Easing',
     path: "easing",
-    builder: (title) => Easing(
-      title: title,
-    ),
+    builder: (title) => Easing(title: title),
   ),
   Page(
     title: "Offset & Delay",
@@ -36,6 +35,11 @@ final pageList = [
     path: "parenting",
     builder: (title) => Parenting(title: title),
   ),
+  Page(
+    title: "Transformation",
+    path: "transformation",
+    builder: (title) => Transformation(title: title),
+  )
 ];
 
 final router = GoRouter(
